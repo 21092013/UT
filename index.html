@@ -153,47 +153,82 @@ header p{
         </div>
     </div>
 
-    <div class="order-box">
-        <h2>טופס הזמנה</h2>
+<div class="order-box">
+    <h2>טופס הזמנה</h2>
 
-        <form id="orderForm" action="https://formspree.io/f/xqeenyrj" method="POST">
-            
-            <div class="field">
-                <label>שם מלא</label>
-                <input type="text" name="שם מלא" required>
-            </div>
-
-            <div class="field">
-                <label>e-mail</label>
-                <input type="tel" name="טלפון" required>
-            </div>
-
-            <div class="field">
-                <label>כתובת</label>
-                <textarea name="כתובת" required></textarea>
-            </div>
-
-            <!-- נספג בכמות מהכפתורים -->
-            <div class="field">
-                <label>עוגיות (כמות)</label>
-                <input type="number" name="עוגיות" id="cookiesInput" min="0" value="0">
-            </div>
-
-            <div class="field">
-                <label>רצועות עוגה (כמות)</label>
-                <input type="number" name="רצועות עוגה" id="stripsInput" min="0" value="0">
-            </div>
-
-            <button type="submit" class="submit-btn">שלח הזמנה</button>
-
-        </form>
-
-        <div class="success-msg" id="successBox">
-            תודה! ההזמנה נשלחה בהצלחה ❤️
+    <form id="orderForm" action="https://formspree.io/f/xqeenyrj" method="POST">
+        <div class="field">
+            <label>שם מלא</label>
+            <input type="text" name="שם מלא" required>
         </div>
 
+        <div class="field">
+            <label>טלפון</label>
+            <input type="tel" name="טלפון" required>
+        </div>
+
+        <div class="field">
+            <label>כתובת</label>
+            <textarea name="כתובת" required></textarea>
+        </div>
+
+        <div class="field">
+            <label>עוגיות (כמות)</label>
+            <input type="number" name="עוגיות" id="cookiesInput" min="0" value="0">
+        </div>
+
+        <div class="field">
+            <label>רצועות עוגה (כמות)</label>
+            <input type="number" name="רצועות עוגה" id="stripsInput" min="0" value="0">
+        </div>
+
+        <!-- סה"כ גדול -->
+        <div style="text-align:center; font-size:2rem; color:#38bdf8; margin:14px 0;">
+            סה"כ: ₪<span id="totalSum">0</span>
+        </div>
+
+        <button type="submit" class="submit-btn">שלח הזמנה</button>
+    </form>
+
+    <div class="success-msg" id="successBox">
+        תודה! ההזמנה נשלחה בהצלחה ❤️
     </div>
 </div>
+
+<script>
+const prices = {cookies:3, strips:5};
+const qty = {cookies:0, strips:0};
+
+function changeQty(item,val){
+    qty[item] = Math.max(0, qty[item]+val);
+    document.getElementById(item+'Qty').textContent = qty[item];
+    document.getElementById(item+'Input').value = qty[item];
+    updateTotal();
+}
+
+// מחשב את הסה"כ
+function updateTotal(){
+    const total = (qty.cookies*prices.cookies) + (qty.strips*prices.strips);
+    document.getElementById('totalSum').textContent = total;
+}
+
+// אם רוצים אפשר גם לעדכן כשהמשתמש משנה ידנית את השדות
+document.getElementById('cookiesInput').addEventListener('input', e=>{
+    qty.cookies = parseInt(e.target.value) || 0;
+    document.getElementById('cookiesQty').textContent = qty.cookies;
+    updateTotal();
+});
+document.getElementById('stripsInput').addEventListener('input', e=>{
+    qty.strips = parseInt(e.target.value) || 0;
+    document.getElementById('stripsQty').textContent = qty.strips;
+    updateTotal();
+});
+</script>
+
+
+   
+
+    
 
 <script>
 const qty={cookies:0,strips:0};
@@ -207,4 +242,3 @@ function changeQty(item,val){
 
 </body>
 </html>
-
