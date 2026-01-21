@@ -352,6 +352,9 @@ header p{
         <div class="orders" id="ordersBox">
             <h2 style="text-align:center;margin-bottom:14px;">רשימת הזמנות</h2>
             <div id="ordersList"></div>
+            <button id="deleteAllBtn" style="width:100%;padding:10px;margin-top:10px;background:#dc2626;color:white;border:none;border-radius:10px;cursor:pointer;">
+                מחק את כל ההזמנות
+            </button>
         </div>
     </div>
 </div>
@@ -442,12 +445,31 @@ function loadOrders(){
             טלפון: ${o.phone}<br>
             כתובת: ${o.address}<br>
             עוגיות: ${o.cookies} | רצועות: ${o.strips}<br>
-            סה"כ: ₪${o.total}
+            סה"כ: ₪${o.total}<br>
+            <button style="margin-top:6px;padding:6px 12px;background:#dc2626;color:white;border:none;border-radius:8px;cursor:pointer;" onclick="deleteOrder('${k}')">מחק הזמנה</button>
         `;
         ordersList.appendChild(d);
     });
 }
+
+// מחיקת הזמנה בודדת
+function deleteOrder(key){
+    if(confirm('בטוח למחוק הזמנה זו?')){
+        localStorage.removeItem(key);
+        loadOrders();
+    }
+}
+
+// מחיקת כל ההזמנות
+document.getElementById('deleteAllBtn').addEventListener('click', function(){
+    if(confirm('בטוח למחוק את כל ההזמנות?')){
+        const keys=Object.keys(localStorage).filter(k=>k.startsWith('order_'));
+        keys.forEach(k=>localStorage.removeItem(k));
+        loadOrders();
+    }
+});
 </script>
 
 </body>
 </html>
+
